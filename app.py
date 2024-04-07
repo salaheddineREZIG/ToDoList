@@ -135,3 +135,7 @@ def LogOut():
     session["loggedIn"] = False
     flash("Logged out succesfully", "success")
     return redirect("/")
+
+
+if __name__ == "__main__":
+    app.run(debug=False, host="0.0.0.0")
