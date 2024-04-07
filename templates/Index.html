@@ -1,0 +1,472 @@
+{%extends "Layout.html"%}
+
+{%block title%}Home{%endblock%}
+
+{%block style%}
+    <style>
+        #addTask {
+            display: none;
+        }
+
+        #showForm {
+            display: block;
+        }
+    </style>
+
+{%endblock%}
+
+{%block navbar%}
+    <nav class="navbar bg-body-tertiary">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">Task Flow</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
+                <div class="offcanvas-header">
+                    <h5 class="offcanvas-title" id="offcanvasNavbarLabel">menu</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                </div>
+                <div class="offcanvas-body">
+                    <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Dropdown
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="#">Action</a></li>
+                                <li><a class="dropdown-item" href="#">Another action</a></li>
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
+                                <li><a class="dropdown-item" href="#">Something else here</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item">
+                            <a href="/LogOut" class="btn btn-outline-danger me-2 nav-link">Log Out</a>
+                        </li>
+                    </ul>
+
+                </div>
+            </div>
+        </div>
+    </nav>
+{%endblock%}
+{%block main%}
+
+    <div class="section">
+        <div class="container-fluid" style="margin-top:2rem">
+            <div class="row">
+                <div class="col-12">
+                    <div class="h1">
+                        <h1> To Do List </h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% if tasks %}
+            <div class="container-fluid text-center justify-content-center" style="margin-top:2rem">
+                <div class="row row-cols-3 allign-items-center justify-content-center g-3">
+                    <div class="col-12 col-md-4">
+                        <h5>Tasks</h5>
+                        <ul class="list-group" >
+                            {% for task in tasks%}
+                                {% if task.status == "To-Do"%}
+                                    {% set color = '' %}
+                                    {% if task.priority == 'High' %}
+                                        {% set color = 'danger' %}
+                                    {% elif task.priority == 'Medium' %}
+                                        {% set color = 'warning' %}
+                                    {% else %}
+                                        {% set color = 'success' %}
+                                    {% endif %}
+                                    <li class="bg-{{color}}-subtle list-group-item">
+                                        <a data-bs-toggle="collapse" href="#collapseTask{{task.task_id}}" role="button" aria-expanded="false" aria-controls="collapseTask{{task.task_id}}" class="link-{{color}} link-offset-2 link-underline link-underline-opacity-0">{{task.title}}</a>
+                                        <div class="text-start collapse m-auto" id="collapseTask{{task.task_id}}">
+                                            <div class="row">
+                                                <div class="col-8">
+                                                    <p><strong>Description:</strong> {{task.description}}</p>
+                                                    <p><strong>Created at:</strong> {{task.created_at}}</p>
+                                                    <p><strong>Due at:</strong> {{task.due_date}}</p>
+                                                    <p><strong>Priority:</strong> {{task.priority}}</p>
+                                                </div>
+                                                <div class="col-4 dropup align-self-end">
+                                                    <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">Actions</button>
+                                                    <ul class="dropdown-menu">
+                                                        <li><button type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#changeStatus">Change Status</button></li>
+                                                        <li><button type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#edit">Edit</button></li>
+                                                        <li><a href="/Delete?id={{task.task_id}}" class="dropdown-item">Delete</a></li>
+                                                    </ul>
+                                                </div>
+                                                <div class="modal fade" id="changeStatus" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="changStatusLabel" aria-hidden="true">
+                                                    <div class="modal-dialog">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h1 class="modal-title fs-5" id="staticBackdropLabel">Change Status</h1>
+                                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                <form role="form" action="/ChangeStatus?id={{task.task_id}}" method="post" id="changeStatusForm">
+                                                                    <div class="form-group">
+                                                                        <label for="status">Status</label>
+                                                                        <select class="form-control" id="status" name="status">
+                                                                            <option disabled selected>Status</option>
+                                                                            {% for status in statuses%}
+                                                                                <option id={{status}} value="{{status}}">{{status}}</option>
+                                                                            {%endfor%}
+                                                                        </select>
+                                                                    </div>
+                                                                </form>
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                                <button type="submit" class="btn btn-primary" form="changeStatusForm">Change Status</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="modal fade" id="edit?id={{task.task_id}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="editLabel" aria-hidden="true">
+                                                    <div class="modal-dialog">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h1 class="modal-title fs-5" id="staticBackdropLabel">Modal title</h1>
+                                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                <form action="/Edit" method="post" id="editForm">
+                                                                    <div class="mb-3">
+                                                                        <div class="mb-3">
+                                                                            <label for="task" class="form-label">Task</label>
+                                                                            <input autocomplete="off" autofocus class="form-control" id="task" name="title" placeholder="Enter your task" type="text" required>
+                                                                        </div>
+                                                                        <div class="mb-3">
+                                                                            <label for="task" class="form-label">Description</label>
+                                                                            <input autocomplete="off" autofocus class="form-control" id="description" name="description" placeholder="Enter your task" type="text" required>
+                                                                        </div>
+                                                                        <div class="mb-3">
+                                                                            <label for="dueDate" class="form-label">Due Date</label>
+                                                                            <input class="form-control" id="dueDate" name="dueDate" type="date">
+                                                                        </div>
+                                                                        <div class="mb-3">
+                                                                            <label for="dueTime" class="form-label">Due Time</label>
+                                                                            <input class="form-control" id="dueTime" name="dueTime" type="time">
+                                                                        </div>
+                                                                        <div class="mb-3">
+                                                                            <label for="priority" class="form-label">Priority</label>
+                                                                            <select class="form-select" id="priority" name="priority" required>
+                                                                                <option selected disabled>Choose priority</option>
+                                                                                {%for priority in priorities%}
+                                                                                    <option id={{priority}} value="{{priority}}">{{priority}}</option>
+                                                                                {%endfor%}
+                                                                            </select>
+                                                                        </div>
+                                                                    </div>
+                                                                </form>
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                                <button type="submit" class="btn btn-primary" form="editForm">Edit</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                {% endif %}
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    <div class="col-12 col-md-4">
+                        <h5>In Progress</h5>
+                        <ul class="list-group list-group-flush">
+                            {% for task in tasks%}
+                                {% if task.status == "Doing"%}
+                                {% set color = '' %}
+                                {% if task.priority == 'High' %}
+                                    {% set color = 'danger' %}
+                                {% elif task.priority == 'Medium' %}
+                                    {% set color = 'warning' %}
+                                {% else %}
+                                    {% set color = 'success' %}
+                                {% endif %}
+                                <li class="bg-{{color}}-subtle list-group-item">
+                                    <a data-bs-toggle="collapse" href="#collapseTask{{task.task_id}}" role="button" aria-expanded="false" aria-controls="collapseTask{{task.task_id}}" class="link-{{color}} link-offset-2 link-underline link-underline-opacity-0">{{task.title}}</a>
+                                    <div class="text-start collapse m-auto" id="collapseTask{{task.task_id}}">
+                                        <div class="row">
+                                            <div class="col-8">
+                                                <p><strong>Description:</strong> {{task.description}}</p>
+                                                <p><strong>Created at:</strong> {{task.created_at}}</p>
+                                                <p><strong>Due at:</strong> {{task.due_date}}</p>
+                                                <p><strong>Priority:</strong> {{task.priority}}</p>
+                                            </div>
+                                            <div class="col-4 dropup align-self-end">
+                                                <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">Actions</button>
+                                                <ul class="dropdown-menu">
+                                                    <li><button type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#changeStatus">Change Status</button></li>
+                                                    <li><button type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#edit">Edit</button></li>
+                                                    <li><a href="/Delete?id={{task.task_id}}" class="dropdown-item">Delete</a></li>
+                                                </ul>
+                                            </div>
+                                            <div class="modal fade" id="changeStatus" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="changStatusLabel" aria-hidden="true">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h1 class="modal-title fs-5" id="staticBackdropLabel">Change Status</h1>
+                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <form role="form" action="/ChangeStatus?id={{task.task_id}}" method="post" id="changeStatusForm">
+                                                                <div class="form-group">
+                                                                    <label for="status">Status</label>
+                                                                    <select class="form-control" id="status" name="status">
+                                                                        <option disabled selected>Status</option>
+                                                                        {% for status in statuses%}
+                                                                            <option id={{status}} value="{{status}}">{{status}}</option>
+                                                                        {%endfor%}
+                                                                    </select>
+                                                                </div>
+                                                            </form>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                            <button type="submit" class="btn btn-primary" form="changeStatusForm">Change Status</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="modal fade" id="edit?id={{task.task_id}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="editLabel" aria-hidden="true">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h1 class="modal-title fs-5" id="staticBackdropLabel">Modal title</h1>
+                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <form action="/Edit" method="post" id="editForm">
+                                                                <div class="mb-3">
+                                                                    <div class="mb-3">
+                                                                        <label for="task" class="form-label">Task</label>
+                                                                        <input autocomplete="off" autofocus class="form-control" id="task" name="title" placeholder="Enter your task" type="text" required>
+                                                                    </div>
+                                                                    <div class="mb-3">
+                                                                        <label for="task" class="form-label">Description</label>
+                                                                        <input autocomplete="off" autofocus class="form-control" id="description" name="description" placeholder="Enter your task" type="text" required>
+                                                                    </div>
+                                                                    <div class="mb-3">
+                                                                        <label for="dueDate" class="form-label">Due Date</label>
+                                                                        <input class="form-control" id="dueDate" name="dueDate" type="date">
+                                                                    </div>
+                                                                    <div class="mb-3">
+                                                                        <label for="dueTime" class="form-label">Due Time</label>
+                                                                        <input class="form-control" id="dueTime" name="dueTime" type="time">
+                                                                    </div>
+                                                                    <div class="mb-3">
+                                                                        <label for="priority" class="form-label">Priority</label>
+                                                                        <select class="form-select" id="priority" name="priority" required>
+                                                                            <option selected disabled>Choose priority</option>
+                                                                            {%for priority in priorities%}
+                                                                                <option id={{priority}} value="{{priority}}">{{priority}}</option>
+                                                                            {%endfor%}
+                                                                        </select>
+                                                                    </div>
+                                                                </div>
+                                                            </form>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                            <button type="submit" class="btn btn-primary" form="editForm">Edit</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                            {% endif %}
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    <div class="col-12 col-md-4">
+                        <h5>Done and Dusted</h5>
+                        <ul class="list-group list-group-flush">
+                            {% for task in tasks%}
+                                {% if task.status == "Completed"%}
+                                {% set color = '' %}
+                                {% if task.priority == 'High' %}
+                                    {% set color = 'danger' %}
+                                {% elif task.priority == 'Medium' %}
+                                    {% set color = 'warning' %}
+                                {% else %}
+                                    {% set color = 'success' %}
+                                {% endif %}
+                                <li class="bg-{{color}}-subtle list-group-item">
+                                    <a data-bs-toggle="collapse" href="#collapseTask{{task.task_id}}" role="button" aria-expanded="false" aria-controls="collapseTask{{task.task_id}}" class="link-{{color}} link-offset-2 link-underline link-underline-opacity-0">{{task.title}}</a>
+                                    <div class="text-start collapse m-auto" id="collapseTask{{task.task_id}}">
+                                        <div class="row">
+                                            <div class="col-8">
+                                                <p><strong>Description:</strong> {{task.description}}</p>
+                                                <p><strong>Created at:</strong> {{task.created_at}}</p>
+                                                <p><strong>Due at:</strong> {{task.due_date}}</p>
+                                                <p><strong>Priority:</strong> {{task.priority}}</p>
+                                            </div>
+                                            <div class="col-4 dropup align-self-end">
+                                                <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">Actions</button>
+                                                <ul class="dropdown-menu">
+                                                    <li><button type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#changeStatus">Change Status</button></li>
+                                                    <li><button type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#edit">Edit</button></li>
+                                                    <li><a href="/Delete?id={{task.task_id}}" class="dropdown-item">Delete</a></li>
+                                                </ul>
+                                            </div>
+                                            <div class="modal fade" id="changeStatus" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="changStatusLabel" aria-hidden="true">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h1 class="modal-title fs-5" id="staticBackdropLabel">Change Status</h1>
+                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <form role="form" action="/ChangeStatus?id={{task.task_id}}" method="post" id="changeStatusForm">
+                                                                <div class="form-group">
+                                                                    <label for="status">Status</label>
+                                                                    <select class="form-control" id="status" name="status">
+                                                                        <option disabled selected>Status</option>
+                                                                        {% for status in statuses%}
+                                                                            <option id={{status}} value="{{status}}">{{status}}</option>
+                                                                        {%endfor%}
+                                                                    </select>
+                                                                </div>
+                                                            </form>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                            <button type="submit" class="btn btn-primary" form="changeStatusForm">Change Status</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="modal fade" id="edit?id={{task.task_id}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="editLabel" aria-hidden="true">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h1 class="modal-title fs-5" id="staticBackdropLabel">Modal title</h1>
+                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <form action="/Edit" method="post" id="editForm">
+                                                                <div class="mb-3">
+                                                                    <div class="mb-3">
+                                                                        <label for="task" class="form-label">Task</label>
+                                                                        <input autocomplete="off" autofocus class="form-control" id="task" name="title" placeholder="Enter your task" type="text" required>
+                                                                    </div>
+                                                                    <div class="mb-3">
+                                                                        <label for="task" class="form-label">Description</label>
+                                                                        <input autocomplete="off" autofocus class="form-control" id="description" name="description" placeholder="Enter your task" type="text" required>
+                                                                    </div>
+                                                                    <div class="mb-3">
+                                                                        <label for="dueDate" class="form-label">Due Date</label>
+                                                                        <input class="form-control" id="dueDate" name="dueDate" type="date">
+                                                                    </div>
+                                                                    <div class="mb-3">
+                                                                        <label for="dueTime" class="form-label">Due Time</label>
+                                                                        <input class="form-control" id="dueTime" name="dueTime" type="time">
+                                                                    </div>
+                                                                    <div class="mb-3">
+                                                                        <label for="priority" class="form-label">Priority</label>
+                                                                        <select class="form-select" id="priority" name="priority" required>
+                                                                            <option selected disabled>Choose priority</option>
+                                                                            {%for priority in priorities%}
+                                                                                <option id={{priority}} value="{{priority}}">{{priority}}</option>
+                                                                            {%endfor%}
+                                                                        </select>
+                                                                    </div>
+                                                                </div>
+                                                            </form>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                            <button type="submit" class="btn btn-primary" form="editForm">Edit</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                            {% endif %}
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            <div class="container-fluid" style="margin-top:2rem">
+                <div class="row">
+                    <div class="col-12">
+                        <h3>No Tasks</h3>
+                        <h5>Add tasks to your list</h5>
+                    </div>
+                </div>
+            </div>
+        {%endif%}
+    </div>
+    <div class="section">
+        <div class="container">
+            <div class="row" style="margin-top:9rem">
+                <div class="col-12 mx-auto text-center m-9">
+                    <form id="showForm">
+                        <div class="form-group">
+                            <button type="button" class="btn btn-primary">Add Task</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <form action="/Add" method="post" id="addTask">
+                <div class="mb-3">
+                    <div class="mb-3">
+                        <label for="task" class="form-label">Task</label>
+                        <input autocomplete="off" autofocus class="form-control" id="task" name="title" placeholder="Enter your task" type="text" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="task" class="form-label">Description</label>
+                        <input autocomplete="off" autofocus class="form-control" id="description" name="description" placeholder="Enter your task" type="text" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="dueDate" class="form-label">Due Date</label>
+                        <input class="form-control" id="dueDate" name="dueDate" type="date">
+                    </div>
+                    <div class="mb-3">
+                        <label for="dueTime" class="form-label">Due Time</label>
+                        <input class="form-control" id="dueTime" name="dueTime" type="time">
+                    </div>
+                    <div class="mb-3">
+                        <label for="priority" class="form-label">Priority</label>
+                        <select class="form-select" id="priority" name="priority" required>
+                            <option selected disabled>Choose priority</option>
+                            {%for priority in priorities%}
+                                <option id={{priority}} value="{{priority}}">{{priority}}</option>
+                            {%endfor%}
+                        </select>
+                    </div>
+                    <div class="button text-center">
+                        <button class="btn btn-primary" type="submit">Add Task</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <script>
+            document.getElementById("showForm").addEventListener("click", function() {
+                let form = document.getElementById("addTask");
+                let button = document.getElementById("showForm");
+
+                if (form.style.display == "none") {
+                    form.style.display = "block";
+                    button.style.display = "none";
+                } else {
+                    form.style.display = "none";
+                    button.style.display = "block";
+
+                }
+            });
+        </script>
+{%endblock%}

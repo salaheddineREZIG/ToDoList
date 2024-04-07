@@ -1,0 +1,82 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Log In</title>
+
+    <script type="text/javascript" nonce="9f3bd71b787b4d04801d5a870b8" src="//local.adguard.org?ts=1707153733614&amp;type=content-script&amp;dmn=colorlib.com&amp;app=chrome.exe&amp;css=1&amp;js=1&amp;gcss=1&amp;rel=1&amp;rji=1&amp;sbe=0"></script>
+    <script type="text/javascript" nonce="9f3bd71b787b4d04801d5a870b8" src="//local.adguard.org?ts=1707153733614&amp;name=AdGuard%20Popup%20Blocker&amp;name=AdGuard%20Extra&amp;type=user-script"></script><link rel="stylesheet" href="fonts/material-icon/css/material-design-iconic-font.min.css">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <meta name="robots" content="noindex, follow">
+    <script nonce="d4df944d-3d15-48a4-96dc-4c06530c6b4e">try{(function(w,d){!function(bu,bv,bw,bx){bu[bw]=bu[bw]||{};bu[bw].executed=[];bu.zaraz={deferred:[],listeners:[]};bu.zaraz.q=[];bu.zaraz._f=function(by){return async function(){var bz=Array.prototype.slice.call(arguments);bu.zaraz.q.push({m:by,a:bz})}};for(const bA of["track","set","debug"])bu.zaraz[bA]=bu.zaraz._f(bA);bu.zaraz.init=()=>{var bB=bv.getElementsByTagName(bx)[0],bC=bv.createElement(bx),bD=bv.getElementsByTagName("title")[0];bD&&(bu[bw].t=bv.getElementsByTagName("title")[0].text);bu[bw].x=Math.random();bu[bw].w=bu.screen.width;bu[bw].h=bu.screen.height;bu[bw].j=bu.innerHeight;bu[bw].e=bu.innerWidth;bu[bw].l=bu.location.href;bu[bw].r=bv.referrer;bu[bw].k=bu.screen.colorDepth;bu[bw].n=bv.characterSet;bu[bw].o=(new Date).getTimezoneOffset();if(bu.dataLayer)for(const bH of Object.entries(Object.entries(dataLayer).reduce(((bI,bJ)=>({...bI[1],...bJ[1]})),{})))zaraz.set(bH[0],bH[1],{scope:"page"});bu[bw].q=[];for(;bu.zaraz.q.length;){const bK=bu.zaraz.q.shift();bu[bw].q.push(bK)}bC.defer=!0;for(const bL of[localStorage,sessionStorage])Object.keys(bL||{}).filter((bN=>bN.startsWith("_zaraz_"))).forEach((bM=>{try{bu[bw]["z_"+bM.slice(7)]=JSON.parse(bL.getItem(bM))}catch{bu[bw]["z_"+bM.slice(7)]=bL.getItem(bM)}}));bC.referrerPolicy="origin";bC.src="/cdn-cgi/zaraz/s.js?z="+btoa(encodeURIComponent(JSON.stringify(bu[bw])));bB.parentNode.insertBefore(bC,bB)};["complete","interactive"].includes(bv.readyState)?zaraz.init():bu.addEventListener("DOMContentLoaded",zaraz.init)}(w,d,"zarazData","script");})(window,document)}catch(e){throw fetch("/cdn-cgi/zaraz/t"),e;};
+    </script>
+  </head>
+  <body>
+    <div class="container-fluid">
+      {% if get_flashed_messages() %}
+            <header>
+                <div class="alert alert-danger mb-0 text-center" role="alert">
+                    {{ get_flashed_messages() | join(" ") }}
+                </div>
+            </header>
+        {% endif %}
+    </div>
+    <section class="vh-100" style="background-color: #eee;">
+      <div class="container-fluid h-100">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+          <div class="col-lg-12 col-xl-11">
+            <div class="card text-black" style="border-radius: 25px;">
+              <div class="card-body p-md-5">
+                <div class="row justify-content-center">
+                  <div class="col-md-10 col-lg-6 col-xl-5 order-2 order-lg-1">
+
+                    <p class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">Log in</p>
+
+                    <form class="mx-1 mx-md-4" action="/LogIn" method="post">
+
+                      <div class="d-flex flex-row align-items-center mb-4">
+                        <i class="fas fa-user fa-lg me-3 fa-fw"></i>
+                        <div class="form-outline flex-fill mb-0">
+                          <label class="form-label"  type="text" for="form3Example1c">Username</label>
+                          <input type="text" id="form3Example1c" autofocus  required name = "username" class="form-control" >
+                        </div>
+                      </div>
+
+                      <div class="d-flex flex-row align-items-center mb-4">
+                        <i class="fas fa-lock fa-lg me-3 fa-fw"></i>
+                        <div class="form-outline flex-fill mb-0">
+                          <label class="form-label" for="form3Example4c">Password</label>
+                          <input type="password" id="form3Example4c"autofocus autocomplete="off" required name = "password" class="form-control" />
+
+                        </div>
+                      </div>
+
+                      <div class="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
+                        <button type="submit" class="btn btn-primary btn-lg">Log In</button>
+                      </div>
+
+                    </form>
+                    <div class="text-center p-t-115" bis_skin_checked="1">
+                      <p><a href="/SignUp" class="link-secondary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover">New user?sign-up</a></p>
+                    </div>
+
+                  </div>
+                  <div class="col-md-10 col-lg-6 col-xl-7 d-flex align-items-center order-1 order-lg-2">
+
+                    <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-registration/draw1.webp"
+                      class="img-fluid" alt="Sample image">
+
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </body>
+</html>
