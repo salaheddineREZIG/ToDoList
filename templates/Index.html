@@ -11,51 +11,23 @@
         #showForm {
             display: block;
         }
+
     </style>
 
 {%endblock%}
 
 {%block navbar%}
-    <nav class="navbar bg-body-tertiary">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="/">Task Flow</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
-                <div class="offcanvas-header">
-                    <h5 class="offcanvas-title" id="offcanvasNavbarLabel">menu</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-                </div>
-                <div class="offcanvas-body">
-                    <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                Dropdown
-                            </a>
-                            <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="#">Action</a></li>
-                                <li><a class="dropdown-item" href="#">Another action</a></li>
-                                <li>
-                                    <hr class="dropdown-divider">
-                                </li>
-                                <li><a class="dropdown-item" href="#">Something else here</a></li>
-                            </ul>
-                        </li>
-                        <li class="nav-item">
-                            <a href="/LogOut" class="btn btn-outline-danger me-2 nav-link">Log Out</a>
-                        </li>
-                    </ul>
-
-                </div>
-            </div>
-        </div>
-    </nav>
+<nav class="navbar bg-body-tertiary">
+    <div class="container-fluid">
+      <span class="navbar-brand">Task Flow</span>
+      <a class="btn btn-danger" href="/LogOut">Logout</a>
+    </div>
+  </nav>
 {%endblock%}
 {%block main%}
 
     <div class="section">
-        <div class="container-fluid" style="margin-top:2rem">
+        <div class="container" style="margin:2rem;">
             <div class="row">
                 <div class="col-12">
                     <div class="h1">
@@ -65,11 +37,11 @@
             </div>
         </div>
         {% if tasks %}
-            <div class="container-fluid text-center justify-content-center" style="margin-top:2rem">
+            <div class="container-fluid text-center justify-content-center" style="margin:2rem;">
                 <div class="row row-cols-3 allign-items-center justify-content-center g-3">
                     <div class="col-12 col-md-4">
-                        <h5>Tasks</h5>
-                        <ul class="list-group" >
+                        <h5>To-Do</h5>
+                        <ul class="list-group" style="margin:2rem;">
                             {% for task in tasks%}
                                 {% if task.status == "To-Do"%}
                                     {% set color = '' %}
@@ -93,12 +65,12 @@
                                                 <div class="col-4 dropup align-self-end">
                                                     <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">Actions</button>
                                                     <ul class="dropdown-menu">
-                                                        <li><button type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#changeStatus">Change Status</button></li>
-                                                        <li><button type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#edit">Edit</button></li>
+                                                        <li><button type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#changeStatus{{task.task_id}}">Change Status</button></li>
+                                                        <li><button type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#edit{{task.task_id}}">Edit</button></li>
                                                         <li><a href="/Delete?id={{task.task_id}}" class="dropdown-item">Delete</a></li>
                                                     </ul>
                                                 </div>
-                                                <div class="modal fade" id="changeStatus" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="changStatusLabel" aria-hidden="true">
+                                                <div class="modal fade" id="changeStatus{{task.task_id}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="changStatusLabel" aria-hidden="true">
                                                     <div class="modal-dialog">
                                                         <div class="modal-content">
                                                             <div class="modal-header">
@@ -125,39 +97,42 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="modal fade" id="edit?id={{task.task_id}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="editLabel" aria-hidden="true">
+                                                <div class="modal fade" id="edit{{task.task_id}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="editLabel" aria-hidden="true">
                                                     <div class="modal-dialog">
                                                         <div class="modal-content">
                                                             <div class="modal-header">
-                                                                <h1 class="modal-title fs-5" id="staticBackdropLabel">Modal title</h1>
+                                                                <h1 class="modal-title fs-5" id="staticBackdropLabel">Edit Task</h1>
                                                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                             </div>
                                                             <div class="modal-body">
-                                                                <form action="/Edit" method="post" id="editForm">
+                                                                <form action="/Edit?id={{task.task_id}}" method="post" id="editForm{{task.task_id}}">
                                                                     <div class="mb-3">
                                                                         <div class="mb-3">
-                                                                            <label for="task" class="form-label">Task</label>
-                                                                            <input autocomplete="off" autofocus class="form-control" id="task" name="title" placeholder="Enter your task" type="text" required>
+                                                                            <label for="title" class="form-label">Task</label>
+                                                                            <input autocomplete="off" autofocus class="form-control" id="title" name="title" placeholder="Enter your task" type="text" required value="{{ task.title }}">
                                                                         </div>
                                                                         <div class="mb-3">
-                                                                            <label for="task" class="form-label">Description</label>
-                                                                            <input autocomplete="off" autofocus class="form-control" id="description" name="description" placeholder="Enter your task" type="text" required>
+                                                                            <label for="description" class="form-label">Description</label>
+                                                                            <input autocomplete="off" autofocus class="form-control" id="description" name="description" placeholder="Enter task description" type="text" required value="{{ task.description }}">
                                                                         </div>
                                                                         <div class="mb-3">
                                                                             <label for="dueDate" class="form-label">Due Date</label>
-                                                                            <input class="form-control" id="dueDate" name="dueDate" type="date">
+                                                                            <input class="form-control" id="dueDate" name="dueDate" type="date" value="{{ task.due_date }}">
                                                                         </div>
                                                                         <div class="mb-3">
                                                                             <label for="dueTime" class="form-label">Due Time</label>
-                                                                            <input class="form-control" id="dueTime" name="dueTime" type="time">
+                                                                            <input class="form-control" id="dueTime" name="dueTime" type="time" value="{{ task.due_time }}">
                                                                         </div>
                                                                         <div class="mb-3">
                                                                             <label for="priority" class="form-label">Priority</label>
                                                                             <select class="form-select" id="priority" name="priority" required>
-                                                                                <option selected disabled>Choose priority</option>
-                                                                                {%for priority in priorities%}
-                                                                                    <option id={{priority}} value="{{priority}}">{{priority}}</option>
-                                                                                {%endfor%}
+                                                                                {% for priority in priorities %}
+                                                                                    {% if priority == task.priority %}
+                                                                                        <option id="{{ priority }}" value="{{ priority }}" selected>{{ priority }}</option>
+                                                                                    {% else %}
+                                                                                        <option id="{{ priority }}" value="{{ priority }}">{{ priority }}</option>
+                                                                                    {% endif %}
+                                                                                {% endfor %}
                                                                             </select>
                                                                         </div>
                                                                     </div>
@@ -165,7 +140,7 @@
                                                             </div>
                                                             <div class="modal-footer">
                                                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                                                <button type="submit" class="btn btn-primary" form="editForm">Edit</button>
+                                                                <button type="submit" class="btn btn-primary" form="editForm{{task.task_id}}">Edit</button>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -179,7 +154,7 @@
                     </div>
                     <div class="col-12 col-md-4">
                         <h5>In Progress</h5>
-                        <ul class="list-group list-group-flush">
+                        <ul class="list-group" style="margin:2rem;">
                             {% for task in tasks%}
                                 {% if task.status == "Doing"%}
                                 {% set color = '' %}
@@ -203,12 +178,12 @@
                                             <div class="col-4 dropup align-self-end">
                                                 <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">Actions</button>
                                                 <ul class="dropdown-menu">
-                                                    <li><button type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#changeStatus">Change Status</button></li>
-                                                    <li><button type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#edit">Edit</button></li>
+                                                    <li><button type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#changeStatus{{task.task_id}}">Change Status</button></li>
+                                                    <li><button type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#edit{{task.task_id}}">Edit</button></li>
                                                     <li><a href="/Delete?id={{task.task_id}}" class="dropdown-item">Delete</a></li>
                                                 </ul>
                                             </div>
-                                            <div class="modal fade" id="changeStatus" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="changStatusLabel" aria-hidden="true">
+                                            <div class="modal fade" id="changeStatus{{task.task_id}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="changStatusLabel" aria-hidden="true">
                                                 <div class="modal-dialog">
                                                     <div class="modal-content">
                                                         <div class="modal-header">
@@ -235,39 +210,42 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="modal fade" id="edit?id={{task.task_id}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="editLabel" aria-hidden="true">
+                                            <div class="modal fade" id="edit{{task.task_id}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="editLabel" aria-hidden="true">
                                                 <div class="modal-dialog">
                                                     <div class="modal-content">
                                                         <div class="modal-header">
-                                                            <h1 class="modal-title fs-5" id="staticBackdropLabel">Modal title</h1>
+                                                            <h1 class="modal-title fs-5" id="staticBackdropLabel">Edit Task</h1>
                                                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                         </div>
                                                         <div class="modal-body">
-                                                            <form action="/Edit" method="post" id="editForm">
+                                                            <form action="/Edit?id={{task.task_id}}" method="post" id="editForm{{task.task_id}}">
                                                                 <div class="mb-3">
                                                                     <div class="mb-3">
-                                                                        <label for="task" class="form-label">Task</label>
-                                                                        <input autocomplete="off" autofocus class="form-control" id="task" name="title" placeholder="Enter your task" type="text" required>
+                                                                        <label for="title" class="form-label">Task</label>
+                                                                        <input autocomplete="off" autofocus class="form-control" id="title" name="title" placeholder="Enter your task" type="text" required value="{{ task.title }}">
                                                                     </div>
                                                                     <div class="mb-3">
-                                                                        <label for="task" class="form-label">Description</label>
-                                                                        <input autocomplete="off" autofocus class="form-control" id="description" name="description" placeholder="Enter your task" type="text" required>
+                                                                        <label for="description" class="form-label">Description</label>
+                                                                        <input autocomplete="off" autofocus class="form-control" id="description" name="description" placeholder="Enter task description" type="text" required value="{{ task.description }}">
                                                                     </div>
                                                                     <div class="mb-3">
                                                                         <label for="dueDate" class="form-label">Due Date</label>
-                                                                        <input class="form-control" id="dueDate" name="dueDate" type="date">
+                                                                        <input class="form-control" id="dueDate" name="dueDate" type="date" value="{{ task.due_date }}">
                                                                     </div>
                                                                     <div class="mb-3">
                                                                         <label for="dueTime" class="form-label">Due Time</label>
-                                                                        <input class="form-control" id="dueTime" name="dueTime" type="time">
+                                                                        <input class="form-control" id="dueTime" name="dueTime" type="time" value="{{ task.due_time }}">
                                                                     </div>
                                                                     <div class="mb-3">
                                                                         <label for="priority" class="form-label">Priority</label>
                                                                         <select class="form-select" id="priority" name="priority" required>
-                                                                            <option selected disabled>Choose priority</option>
-                                                                            {%for priority in priorities%}
-                                                                                <option id={{priority}} value="{{priority}}">{{priority}}</option>
-                                                                            {%endfor%}
+                                                                            {% for priority in priorities %}
+                                                                                {% if priority == task.priority %}
+                                                                                    <option id="{{ priority }}" value="{{ priority }}" selected>{{ priority }}</option>
+                                                                                {% else %}
+                                                                                    <option id="{{ priority }}" value="{{ priority }}">{{ priority }}</option>
+                                                                                {% endif %}
+                                                                            {% endfor %}
                                                                         </select>
                                                                     </div>
                                                                 </div>
@@ -275,7 +253,7 @@
                                                         </div>
                                                         <div class="modal-footer">
                                                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                                            <button type="submit" class="btn btn-primary" form="editForm">Edit</button>
+                                                            <button type="submit" class="btn btn-primary" form="editForm{{task.task_id}}">Edit</button>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -289,7 +267,7 @@
                     </div>
                     <div class="col-12 col-md-4">
                         <h5>Done and Dusted</h5>
-                        <ul class="list-group list-group-flush">
+                        <ul class="list-group" style="margin:2rem;">
                             {% for task in tasks%}
                                 {% if task.status == "Completed"%}
                                 {% set color = '' %}
@@ -313,12 +291,12 @@
                                             <div class="col-4 dropup align-self-end">
                                                 <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">Actions</button>
                                                 <ul class="dropdown-menu">
-                                                    <li><button type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#changeStatus">Change Status</button></li>
-                                                    <li><button type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#edit">Edit</button></li>
+                                                    <li><button type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#changeStatus{{task.task_id}}">Change Status</button></li>
+                                                    <li><button type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#edit{{task.task_id}}">Edit</button></li>
                                                     <li><a href="/Delete?id={{task.task_id}}" class="dropdown-item">Delete</a></li>
                                                 </ul>
                                             </div>
-                                            <div class="modal fade" id="changeStatus" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="changStatusLabel" aria-hidden="true">
+                                            <div class="modal fade" id="changeStatus{{task.task_id}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="changStatusLabel" aria-hidden="true">
                                                 <div class="modal-dialog">
                                                     <div class="modal-content">
                                                         <div class="modal-header">
@@ -345,39 +323,42 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="modal fade" id="edit?id={{task.task_id}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="editLabel" aria-hidden="true">
+                                            <div class="modal fade" id="edit{{task.task_id}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="editLabel" aria-hidden="true">
                                                 <div class="modal-dialog">
                                                     <div class="modal-content">
                                                         <div class="modal-header">
-                                                            <h1 class="modal-title fs-5" id="staticBackdropLabel">Modal title</h1>
+                                                            <h1 class="modal-title fs-5" id="staticBackdropLabel">Edit Task</h1>
                                                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                         </div>
                                                         <div class="modal-body">
-                                                            <form action="/Edit" method="post" id="editForm">
+                                                            <form action="/Edit?id={{task.task_id}}" method="post" id="editForm{{task.task_id}}">
                                                                 <div class="mb-3">
                                                                     <div class="mb-3">
-                                                                        <label for="task" class="form-label">Task</label>
-                                                                        <input autocomplete="off" autofocus class="form-control" id="task" name="title" placeholder="Enter your task" type="text" required>
+                                                                        <label for="title" class="form-label">Task</label>
+                                                                        <input autocomplete="off" autofocus class="form-control" id="title" name="title" placeholder="Enter your task" type="text" required value="{{ task.title }}">
                                                                     </div>
                                                                     <div class="mb-3">
-                                                                        <label for="task" class="form-label">Description</label>
-                                                                        <input autocomplete="off" autofocus class="form-control" id="description" name="description" placeholder="Enter your task" type="text" required>
+                                                                        <label for="description" class="form-label">Description</label>
+                                                                        <input autocomplete="off" autofocus class="form-control" id="description" name="description" placeholder="Enter task description" type="text" required value="{{ task.description }}">
                                                                     </div>
                                                                     <div class="mb-3">
                                                                         <label for="dueDate" class="form-label">Due Date</label>
-                                                                        <input class="form-control" id="dueDate" name="dueDate" type="date">
+                                                                        <input class="form-control" id="dueDate" name="dueDate" type="date" value="{{ task.due_date }}">
                                                                     </div>
                                                                     <div class="mb-3">
                                                                         <label for="dueTime" class="form-label">Due Time</label>
-                                                                        <input class="form-control" id="dueTime" name="dueTime" type="time">
+                                                                        <input class="form-control" id="dueTime" name="dueTime" type="time" value="{{ task.due_time }}">
                                                                     </div>
                                                                     <div class="mb-3">
                                                                         <label for="priority" class="form-label">Priority</label>
                                                                         <select class="form-select" id="priority" name="priority" required>
-                                                                            <option selected disabled>Choose priority</option>
-                                                                            {%for priority in priorities%}
-                                                                                <option id={{priority}} value="{{priority}}">{{priority}}</option>
-                                                                            {%endfor%}
+                                                                            {% for priority in priorities %}
+                                                                                {% if priority == task.priority %}
+                                                                                    <option id="{{ priority }}" value="{{ priority }}" selected>{{ priority }}</option>
+                                                                                {% else %}
+                                                                                    <option id="{{ priority }}" value="{{ priority }}">{{ priority }}</option>
+                                                                                {% endif %}
+                                                                            {% endfor %}
                                                                         </select>
                                                                     </div>
                                                                 </div>
@@ -385,7 +366,7 @@
                                                         </div>
                                                         <div class="modal-footer">
                                                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                                            <button type="submit" class="btn btn-primary" form="editForm">Edit</button>
+                                                            <button type="submit" class="btn btn-primary" form="editForm{{task.task_id}}">Edit</button>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -400,7 +381,7 @@
                 </div>
             </div>
         {% else %}
-            <div class="container-fluid" style="margin-top:2rem">
+            <div class="container" style="margin:2rem;">
                 <div class="row">
                     <div class="col-12">
                         <h3>No Tasks</h3>
@@ -412,8 +393,8 @@
     </div>
     <div class="section">
         <div class="container">
-            <div class="row" style="margin-top:9rem">
-                <div class="col-12 mx-auto text-center m-9">
+            <div class="row" style="margin-top:2rem">
+                <div class="col-12 mx-auto text-center">
                     <form id="showForm">
                         <div class="form-group">
                             <button type="button" class="btn btn-primary">Add Task</button>
@@ -469,4 +450,5 @@
                 }
             });
         </script>
+
 {%endblock%}

@@ -35,7 +35,7 @@ def Add():
 
     if description is not None and title is not None:
         if len(description) > 100 or len(title) > 100:
-            flash("please enter a shorter title anddescription", "error")
+            flash("please enter a shorter title and description", "error")
             return redirect("/")
     date_format = "%Y-%m-%d %H:%M"
     dueDate = dueDate + " " + dueTime
@@ -65,7 +65,35 @@ def ChangeStaus():
     id = request.args.get("id")
     db.execute("UPDATE tasks SET status = ? where task_id = ?",newStatus,id)
     return redirect("/")
+
+@app.route("/Edit",methods=["POST"])
+def Edit():
+    id = request.args.get("id")
+    title = request.form.get("title")
+    description = request.form.get("description")
+    dueDate = request.form.get("dueDate")
+    dueTime = request.form.get("dueTime")
+    priority = request.form.get("priority")
+
+    if description is not None and title is not None:
+        if len(description) > 100 or len(title) > 100:
+            flash("please enter a shorter title and description", "error")
+            return redirect("/")
+    date_format = "%Y-%m-%d %H:%M"
+    dueDate = dueDate + " " + dueTime
+    dueDate = datetime.datetime.strptime(dueDate, date_format)
+    if dueDate < datetime.datetime.now():
+        flash("invaild due date", "error")
+        return redirect("/")
+    if not priority in priorities:
+        flash("invalid priority", "error")
+        return redirect("/")
+    db.execute("UPDATE tasks SET title = ?, description = ?, due_date = ?,priority = ? WHERE task_id = ? ",title,description,dueDate,priority,id)
+    return redirect("/")
+
+
 @app.route("/SignUp", methods=["GET", "POST"])
+
 def SignUp():
     if request.method == "POST":
         username = request.form.get("username")
@@ -135,7 +163,3 @@ def LogOut():
     session["loggedIn"] = False
     flash("Logged out succesfully", "success")
     return redirect("/")
-
-
-if __name__ == "__main__":
-    app.run(debug=False, host="0.0.0.0")
