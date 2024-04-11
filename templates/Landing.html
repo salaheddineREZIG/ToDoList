@@ -1,44 +1,201 @@
-{%extends "Layout.html"%}
+<!DOCTYPE html>
+<html lang="en">
 
-{%block title%}
-    Landing
-{%endblock%}
-{% block navbar%}
-<nav class="navbar navbar-expand-lg navbar-light bg-light justify-content-between">
-    <a class="navbar-brand" href="/">Task Flow</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav ms-auto">
-            <li class="nav-item">
-                <a class="nav-link" href="#">Features</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#">About Us</a>
-            </li>
-            <li class="nav-item">
-                <a href="/LogIn" class="btn btn-outline-secondary me-2">Log In</a>
-            </li>
-            <li class="nav-item">
-                <a href="/SignUp" class="btn btn-danger">Sign Up</a>
-            </li>
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+  <title>Task Flow</title>
+  <meta content="" name="description">
+  <meta content="" name="keywords">
+
+  <!-- Favicons -->
+  <link href="static/img/favicon.png" rel="icon">
+  <link href="static/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Montserrat:300,400,500,700" rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="static/vendor/aos/aos.css" rel="stylesheet">
+  <link href="static/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="static/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link href="static/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+  <link href="static/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+
+  <!-- Template Main CSS File -->
+  <link href="static/css/style.css" rel="stylesheet">
+
+</head>
+
+<body>
+
+  <!-- ======= Header ======= -->
+  <header id="header" class="fixed-top d-flex align-items-center">
+    <div class="container d-flex justify-content-between">
+
+      <div class="logo">
+        <!-- Uncomment below if you prefer to use an text logo -->
+        <h1><a href="index.html">Task Flow</a></h1>
+      </div>
+
+      <nav id="navbar" class="navbar">
+        <ul>
+          <li><a class="nav-link scrollto active" href="#hero">Home</a></li>
+          <li><a class="nav-link scrollto" href="#about">About</a></li>
+          <li><a class="nav-link scrollto" href="#services">Features</a></li>
+          <li><a class="nav-link scrollto" href="#contact">Contact</a></li>
         </ul>
+        <i class="bi bi-list mobile-nav-toggle"></i>
+      </nav><!-- .navbar -->
+
     </div>
+  </header><!-- #header -->
 
-{%endblock%}
-{%block main%}
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-md-12 m-5" >
-                <h1 class="page-header text-align-left">Empower Your Day, One Task at a Time!</h1>
-                <p class="text-align-left">Start your journey with us. </p>
+  <!-- ======= Hero Section ======= -->
+  <section id="hero" class="clearfix">
+    <div class="container" data-aos="fade-up">
 
+      <div class="hero-img" data-aos="zoom-out" data-aos-delay="200">
+        <img src="static/img/hero-img.svg" alt="" class="img-fluid">
+      </div>
+
+      <div class="hero-info" data-aos="zoom-in" data-aos-delay="100">
+        <h2>We provide<br><span>The Best</span><br>Task mangement Web site</h2>
+        <div>
+          <a href="#about" class="btn-get-started scrollto">Get Started</a>
+          <a href="#services" class="btn-services scrollto">Our Features</a>
+        </div>
+      </div>
+
+    </div>
+  </section><!-- End Hero Section -->
+
+  <main id="main">
+
+    <!-- ======= About Section ======= -->
+    <section id="about">
+      <div class="container-fluid" data-aos="fade-up">
+
+        <header class="section-header text-start">
+          <h3 class="h3">About Us</h3>
+          <p>Hello there! I'm Salaheddine Rezig, currently pursuing my degree in computer science. As a passionate learner, I'm constantly seeking opportunities to enhance my skills and expand my knowledge in the field of technology.<br>This to-do list website is more than just a project for me; it's a reflection of my commitment to continuous improvement. By building practical applications like this one, I aim to not only sharpen my coding abilities but also contribute something meaningful to the digital world.I chose to develop a to-do list because I believe in the power of organization and productivity.<br> As students, professionals, or individuals with busy lives, staying on top of tasks can be challenging. This website serves as a tool to simplify that process and help users manage their responsibilities more effectively.</p>
+        </header>
+
+        </div>
+    </section><!-- End About Section -->
+
+    <!-- ======= Services Section ======= -->
+    <section id="services" class="section-bg">
+      <div class="container" data-aos="fade-up">
+
+        <header class="section-header">
+          <h3>features</h3>
+          <p>Our webstite provides a variety of features to help users manage their tasks more effectively.</p>
+        </header>
+
+        <div class="row justify-content-center">
+
+          <div class="col-md-6 col-lg-5" data-aos="zoom-in" data-aos-delay="100">
+            <div class="box">
+              <div class="icon"><i class="bi bi-briefcase" style="color: #ff689b;"></i></div>
+              <h4 class="title"><a href="">Task Management</a></h4>
+              <p class="description">Easily create, edit, and delete tasks to stay organized and manage your to-do list effectively.</p>
             </div>
+          </div>
+          <div class="col-md-6 col-lg-5" data-aos="zoom-in" data-aos-delay="200">
+            <div class="box">
+              <div class="icon"><i class="bi bi-card-checklist" style="color: #e9bf06;"></i></div>
+              <h4 class="title"><a href="">Priority Levels</a></h4>
+              <p class="description"> Assign priority levels (Low, Medium, High) to tasks to prioritize your workload and focus on what matters most.</p>
+            </div>
+          </div>
+
+          <div class="col-md-6 col-lg-5" data-aos="zoom-in" data-aos-delay="100">
+            <div class="box">
+              <div class="icon"><i class="bi bi-bar-chart" style="color: #3fcdc7;"></i></div>
+              <h4 class="title"><a href="">Status Tracking</a></h4>
+              <p class="description">Track the status of your tasks (To-Do, Doing, Completed) to monitor progress and stay on top of your projects.</p>
+            </div>
+          </div>
+          <div class="col-md-6 col-lg-5" data-aos="zoom-in" data-aos-delay="200">
+            <div class="box">
+              <div class="icon"><i class="bi bi-binoculars" style="color:#41cf2e;"></i></div>
+              <h4 class="title"><a href="">User Authentication</a></h4>
+              <p class="description">Securely sign up, log in, and log out to access your personal task list and keep your data safe.</p>
+            </div>
+          </div>
+
+          <div class="col-md-6 col-lg-5" data-aos="zoom-in" data-aos-delay="100">
+            <div class="box">
+              <div class="icon"><i class="bi bi-brightness-high" style="color: #d6ff22;"></i></div>
+              <h4 class="title"><a href="">User-Friendly Interface</a></h4>
+              <p class="description"> Enjoy a clean and intuitive interface that makes task management simple and straightforward.</p>
+            </div>
+          </div>
+          <div class="col-md-6 col-lg-5" data-aos="zoom-in" data-aos-delay="200">
+            <div class="box">
+              <div class="icon"><i class="bi bi-calendar4-week" style="color: #4680ff;"></i></div>
+              <h4 class="title"><a href="">Due Date Management</a></h4>
+              <p class="description">Set due dates for tasks to ensure timely completion and avoid missing deadlines.</p>
+            </div>
+          </div>
 
         </div>
 
+      </div>
+    </section><!-- End Services Section -->
+
+  </main><!-- End #main -->
+
+  <!-- ======= Footer ======= -->
+  <footer id="footer">
+    <div class="footer-top">
+      <div class="container">
+        <div class="row justify-content-between">
+
+          <div class="col-lg-4 col-md-6 footer-info">
+            <h3>Task Flow</h3>
+            <p>I made this website to improve my skills, a lot chatgpt and "other inspiration" was used to make the web site so take it with a grain of salt.</p>
+          </div>
+
+          <div class="col-lg-2 col-md-6 footer-links">
+            <h4>Useful Links</h4>
+            <ul>
+              <li><a href="#">Home</a></li>
+              <li><a href="#">About us</a></li>
+              <li><a href="#">Features</a></li>
+              <li><a href="#">Terms of service</a></li>
+              <li><a href="#">Privacy policy</a></li>
+            </ul>
+          </div>
+
+
+          </div>
+
+      
+
+        </div>
+      </div>
     </div>
 
+    
+  </footer><!-- End Footer -->
 
-{%endblock%}
+  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+  <!-- Vendor JS Files -->
+  <script src="assets/vendor/purecounter/purecounter_vanilla.js"></script>
+  <script src="assets/vendor/aos/aos.js"></script>
+  <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="assets/vendor/glightbox/js/glightbox.min.js"></script>
+  <script src="assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
+  <script src="assets/vendor/swiper/swiper-bundle.min.js"></script>
+  <script src="assets/vendor/php-email-form/validate.js"></script>
+
+  <!-- Template Main JS File -->
+  <script src="assets/js/main.js"></script>
+
+</body>
+
+</html>
