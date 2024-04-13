@@ -30,18 +30,13 @@
     {%block style%}
     {%endblock%}
 </head>
-<body>
+<body>    
+    {%block navbar%}
+        
+    {%endblock%}
     <div class="container-fluid">
         <div class="row">
-            <div class="col-md-12">
-                {%block navbar%}
-                {%endblock%}
-            </div>
-        </div>
-    </div>
-    <div class="container-fluid">
-        {% if get_flashed_messages() %}
-            <div class="row">
+            {% if get_flashed_messages() %}
                 <ul>
                     {% for message in get_flashed_messages(with_categories=true) %}
                         {% if "error" in message[0] %}
@@ -59,8 +54,8 @@
                         {% endif %}
                     {% endfor %}
                 </ul>
-            </div>
-        {% endif %}
+            {% endif %}
+        </div>
     </div>
     {%block main%}
 
